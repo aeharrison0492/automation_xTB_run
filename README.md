@@ -1,0 +1,1 @@
+The file is designed based on my research of DNA tetramers with cationic intercalators, so charges, unpaired electrons and solvent system are designed for these systems. Future additions may include option to input for these, but recommend changing them in the file before use, and running only on systems which all have the same charge, upe and solvent system. 
