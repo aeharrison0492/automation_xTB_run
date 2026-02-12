@@ -11,7 +11,7 @@ if (-not $RootFolder) {
 
 # Prompt user for run type
 Write-Host "Select run type:"
-Write-Host "1: Geometry optimization (--opt vtight)"
+Write-Host "1: Geometry optimization (--opt vtight)" # vtight can be changed depending on level of optimisation required, full list of tightness available in xTB documentation
 Write-Host "2: Optimization + Hessian (--ohess vtight)"
 Write-Host "3: Hessian only (--hess)"
 $runChoice = Read-Host "Enter 1, 2, or 3"
@@ -85,11 +85,11 @@ foreach ($xyzFile in $xyzFiles) {
 
         Write-Host "Running xtb job for '$xyzFile' with mode: $runType"
 
-        # Build arguments based on run type
+        # Build arguments based on run type: given data gives a charge of -5 and unpaired electrons of 0 in solvent water
         $arguments = @(
-            '--chrg', '-5',
-            '--uhf', '0',
-            '--alpb', 'water',
+            '--chrg', '-5', # charge
+            '--uhf', '0', # number of upe
+            '--alpb', 'water', # solvent system: see xTB documentation for full solvent list
             '--parallel', $Parallel.ToString()
         )
 
@@ -128,7 +128,7 @@ foreach ($xyzFile in $xyzFiles) {
     }
 }
 
-# Write summary log
+# Write summary log: shows if any files were skipped during the run due to poor formating. Check atom numbers and format of .xyz file for errors.
 $summaryPath = Join-Path $RootFolder "xtb_summary_log.txt"
 
 "xtb Job Summary - $(Get-Date)" | Out-File $summaryPath
@@ -140,5 +140,6 @@ $successfulJobs | Out-File $summaryPath -Append
 "" | Out-File $summaryPath -Append
 "Skipped Jobs:" | Out-File $summaryPath -Append
 $skippedJobs | Out-File $summaryPath -Append
+
 
 Write-Host "Summary log written to: $summaryPath"
